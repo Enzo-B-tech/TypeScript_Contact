@@ -1,66 +1,65 @@
-// Interface TypeScript qui décrit la structure d’un contact
 interface Contact {
     name: string;
     email: string;
 }
 
-// Récupération des éléments HTML
-const form = document.querySelector('#contact-form') as HTMLFormElement;
-const nameInput = document.querySelector('#name') as HTMLInputElement;
-const emailInput = document.querySelector('#email') as HTMLInputElement;
-const contactList = document.querySelector('#contact-list') as HTMLUListElement;
+const form = document.getElementById('contact-form') as HTMLFormElement;
+const nameInput = document.getElementById('name') as HTMLInputElement;
+const emailInput = document.getElementById('email') as HTMLInputElement;
+const contactList = document.getElementById('contact-list') as HTMLUListElement;
 
-// Tableau contenant tous les contacts
+// Tableau qui contient tous les contacts enregistrés
 let contacts: Contact[] = [];
 
-/**
- * Affiche tous les contacts dans la liste avec boutons modifier/supprimer
- */
-function renderContacts(): void {
-    contactList.innerHTML = ''; // Réinitialiser la liste HTML
-
-    contacts.forEach((contact, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${contact.name} – ${contact.email}</span>
-            <button onclick="editContact(${index})">Modifier</button>
-            <button onclick="deleteContact(${index})">Supprimer</button>
-        `;
-        contactList.appendChild(li);
-    });
-}
-
-/**
- * Ajoute un contact à la liste
- */
+// Lorsqu'on soumet le formulaire
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const name = nameInput.value.trim();
     const email = emailInput.value.trim();
+
     if (!name || !email) return;
 
-    contacts.push({ name, email }); // Ajouter le nouveau contact
-    form.reset(); // Réinitialise le formulaire
-    renderContacts(); // Rafraîchit l'affichage
+    // Création d'un nouveau contact
+    const newContact: Contact = { name, email };
+    contacts.push(newContact);
+
+    // Met à jour l'affichage
+    renderContacts();
+
+    // Réinitialise le formulaire
+    form.reset();
 });
 
-/**
- * Supprime un contact
- */
-(window as any).deleteContact = (index: number) => {
-    contacts.splice(index, 1);
-    renderContacts();
-}
+// Fonction qui affiche tous les contacts dans la page
+function renderContacts(): void {
+    contactList.innerHTML = '';
 
-/**
- * Modifie un contact (réutilise les champs du formulaire)
- */
-(window as any).editContact = (index: number) => {
-    const contact = contacts[index];
-    nameInput.value = contact.name;
-    emailInput.value = contact.email;
+    contacts.forEach((contact, index) => {
+        const li = document.createElement('li');
 
-    contacts.splice(index, 1); // Supprimer temporairement
-    renderContacts(); // Réactualiser l’affichage
+        li.innerHTML = `
+            <strong>${contact.name}</strong> (${contact.email})
+            <button class="edit-btn">Modifier</button>
+            <button class="delete-btn">Supprimer</button>
+        `;
+
+        // Bouton Supprimer
+        li.querySelector('.delete-btn')?.addEventListener('click', () => {
+            contacts.splice(index, 1); // supprime 1 élément à l'index
+            renderContacts(); // réaffiche la liste
+        });
+
+        // Bouton Modifier
+        li.querySelector('.edit-btn')?.addEventListener('click', () => {
+            const newName = prompt("Nouveau nom :", contact.name);
+            const newEmail = prompt("Nouvel email :", contact.email);
+            if (newName && newEmail) {
+                contacts[index] = { name: newName, email: newEmail };
+                renderContacts();
+            }
+        });
+
+        contactList.appendChild(li);
+    });
 }
