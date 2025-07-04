@@ -3,9 +3,9 @@ const form = document.getElementById('contact-form');
 const nameInput = document.getElementById('name');
 const emailInput = document.getElementById('email');
 const contactList = document.getElementById('contact-list');
-// Tableau qui contient tous les contacts enregistrés
+// Tableau des contacts
 let contacts = [];
-// Lorsqu'on soumet le formulaire
+// Soumission du formulaire
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const name = nameInput.value.trim();
@@ -15,12 +15,12 @@ form.addEventListener('submit', (e) => {
     // Création d'un nouveau contact
     const newContact = { name, email };
     contacts.push(newContact);
-    // Met à jour l'affichage
+    // Maj de l'affichage
     renderContacts();
     // Réinitialise le formulaire
     form.reset();
 });
-// Fonction qui affiche tous les contacts dans la page
+// Affichage des contacts dans la page
 function renderContacts() {
     contactList.innerHTML = '';
     contacts.forEach((contact, index) => {
