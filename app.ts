@@ -8,10 +8,10 @@ const nameInput = document.getElementById('name') as HTMLInputElement;
 const emailInput = document.getElementById('email') as HTMLInputElement;
 const contactList = document.getElementById('contact-list') as HTMLUListElement;
 
-// Tableau qui contient tous les contacts enregistrés
+// Tableau des contacts
 let contacts: Contact[] = [];
 
-// Lorsqu'on soumet le formulaire
+// Soumission du formulaire
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -24,14 +24,14 @@ form.addEventListener('submit', (e) => {
     const newContact: Contact = { name, email };
     contacts.push(newContact);
 
-    // Met à jour l'affichage
+    // Maj de l'affichage
     renderContacts();
 
     // Réinitialise le formulaire
     form.reset();
 });
 
-// Fonction qui affiche tous les contacts dans la page
+// Affichage des contacts dans la page
 function renderContacts(): void {
     contactList.innerHTML = '';
 
